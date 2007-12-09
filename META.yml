@@ -1,0 +1,15 @@
+--- #YAML:1.0
+name:                Net-Netcraft-Query
+version:             0.01
+abstract:            Query the Netcraft webserver search
+license:             ~
+generated_by:        ExtUtils::MakeMaker version 6.36
+distribution_type:   module
+requires:     
+    HTTP::Request::Common:         1.26
+    LWP:                           5.805
+meta-spec:
+    url:     http://module-build.sourceforge.net/META-spec-v1.2.html
+    version: 1.2
+author:
+    - Matteo Cantoni <matteo.cantoni@nothink.org>

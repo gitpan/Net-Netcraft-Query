@@ -1,0 +1,7 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/Net-Netcraft-Query.t
+lib/Net/Netcraft/Query.pm
+META.yml                                 Module meta-data (added by MakeMaker)
