@@ -8,7 +8,7 @@ use Exporter ();
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(host site timeout http_proxy user_agent query);
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 $LIBRARY = __PACKAGE__;
 
 use HTTP::Request::Common qw(GET);
@@ -108,7 +108,7 @@ sub query {
 		# ip address 
 		if ($row =~ /<b>IP address<\/b>/){
 			if ($row =~ m/(\d+)\.(\d+)\.(\d+)\.(\d+)/){
-				$res{ 'ip_address' } = $1.$2.$3.$4;
+				$res{ 'ip_address' } = "$1.$2.$3.$4";
 			}
 		}
 	
@@ -177,12 +177,14 @@ sub query {
 	}
 
 	$his =~ m/<br><table class=TBtable><caption>Hosting History<\/caption>(.*)<\/table><br>/;	
-	my @his = split(/<\/td><\/tr>/,$1);
-	my $n = 0;
-	foreach $row (@his){
-		$n++;
-		if ($row =~ m/<tr class=TB(.*)><td><a href="\/netblock\?q=(.*)">(.*)<\/a><\/td><td>(\d+)\.(\d+)\.(\d+)\.(\d+)<\/td><td>(.*)<\/td><td>(.*)<\/td><td>(.*)/){
-			$res{ "history_$n" } = "$3:$4.$5.$6.$7:$8:$9:$10";
+	if (defined($1)){
+		my @his = split(/<\/td><\/tr>/,$1);
+		my $n = 0;
+		foreach $row (@his){
+			$n++;
+			if ($row =~ m/<tr class=TB(.*)><td><a href="\/netblock\?q=(.*)">(.*)<\/a><\/td><td>(\d+)\.(\d+)\.(\d+)\.(\d+)<\/td><td>(.*)<\/td><td>(.*)<\/td><td>(.*)/){
+				$res{ "history_$n" } = "$3:$4.$5.$6.$7:$8:$9:$10";
+			}
 		}
 	}
 
@@ -212,11 +214,24 @@ Net::Netcraft::Query - Query the Netcraft webserver search
 
   my %res = $req->query;
 
-  print "Site        : " . $res{site} . "\n";
-  print "Last reboot : " . $res{last_reboot} . "\n";
-  print "Domain      : " . $res{domain} . "\n";
-  print "History 1   : " . $res{history_1} . "\n";
-  print "History 2   : " . $res{history_2} . "\n";
+  print "Site                    : " . $res{site} . "\n";
+  print "Domain                  : " . $res{domain} . "\n";
+  print "IP Address              : " . $res{ip_address} . "\n";
+  print "Nameserver              : " . $res{nameserver} . "\n";
+  print "Reverse Dns             : " . $res{reverse_dns} . "\n";
+  print "Country                 : " . $res{country} . "\n";
+  print "Nameserver Organisation : " . $res{nameserver_organisation} . "\n";
+  print "Date First Seen         : " . $res{date_first_seen} . "\n";
+  print "Dns Admin               : " . $res{dns_admin} . "\n";
+  print "Organisation            : " . $res{organisation} . "\n";
+  print "Domain Registry         : " . $res{domain_registry} . "\n";
+  print "Last Reboot             : " . $res{last_reboot} . "\n";
+  print "Netblock Owner          : " . $res{netblock_owner} . "\n";
+
+  print "\n";
+
+  print "History 1               : " . $res{history_1} . "\n";
+  print "History 2               : " . $res{history_2} . "\n";
 
 =head1 DESCRIPTION
 
@@ -260,7 +275,7 @@ Default is 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)'.
 
 =head2 query 
 
-It returns a hash containing all results; 
+It returns a hash containing all results (country, date_first_seen, dns_admin, domain, domain_registry, history_1 - history_10, ip_address, last_reboot, nameserver, nameserver_organisation, netblock_owner, organisation, reverse_dns, site, site_rank); 
 
   my %res = $req->query;
 
@@ -272,9 +287,13 @@ Netcraft Services, http://news.netcraft.com/
 
 Matteo Cantoni, E<lt>matteo.cantoni@nothink.org<gt>
 
+=head1 CONTRIBUTORS
+
+Joshua D. Abraham
+
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2007 by Matteo Cantoni 
+Copyright (C) 2007,2008 by Matteo Cantoni 
 
 This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 
