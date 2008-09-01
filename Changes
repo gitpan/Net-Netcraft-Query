@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::Netcraft::Query.
 
+0.03  Mon Sep  1 10:53:36 CEST 2008
+	- fix history hash initialization (Joshua D. Abraham)
+
 0.02  Wed Aug 20 09:56:14 2008 
 	- fix history (Joshua D. Abraham)
 	- fix ip_address

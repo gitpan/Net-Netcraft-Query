@@ -8,7 +8,7 @@ use Exporter ();
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(host site timeout http_proxy user_agent query);
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 $LIBRARY = __PACKAGE__;
 
 use HTTP::Request::Common qw(GET);
@@ -180,6 +180,7 @@ sub query {
 	if (defined($1)){
 		my @his = split(/<\/td><\/tr>/,$1);
 		my $n = 0;
+        	for my $i (0..10) { $res{ "history_$i" } = ''; }
 		foreach $row (@his){
 			$n++;
 			if ($row =~ m/<tr class=TB(.*)><td><a href="\/netblock\?q=(.*)">(.*)<\/a><\/td><td>(\d+)\.(\d+)\.(\d+)\.(\d+)<\/td><td>(.*)<\/td><td>(.*)<\/td><td>(.*)/){
